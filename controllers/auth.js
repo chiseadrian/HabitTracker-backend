@@ -140,7 +140,7 @@ const confirmRegister = async (req, res = response) => {
         // Generar JWT para la sesion
         const tokenSession = await generarJWT(uid, name);
 
-        res.redirect('http://localhost:3000/login');
+        res.redirect(`${process.env.HOST}/login`);
     }catch(err){
         console.log(err);
          res.status(500).json({
