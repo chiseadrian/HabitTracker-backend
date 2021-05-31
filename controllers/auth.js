@@ -23,10 +23,10 @@ const crearUsuario = async (req, res = response) => {
         // Encriptar contraseña
         const salt = bcrypt.genSaltSync();
         usuario.password = bcrypt.hashSync(password, salt);
-            
+
         await usuario.save();
         await sendConfirmEmail(usuario.id, usuario.name, email);
-        
+
         res.status(201).json({
             ok: true,
             uid: usuario.id,
@@ -56,7 +56,7 @@ const loginUsuario = async (req, res = response) => {
             });
         }
 
-        if(!usuario.confirmed){
+        if (!usuario.confirmed) {
             return res.status(400).json({
                 ok: false,
                 msg: "Please verify your email address!"
@@ -105,8 +105,8 @@ const revalidarToken = async (req, res = response) => {
     })
 }
 
-const googleLogin = async(req, res = response)=>{
-    const { name, email } = req.body;
+const googleLogin = async (req, res = response) => {
+    const { email } = req.body;
 
     try {
         let usuario = await Usuario.findOne({ email });
@@ -133,21 +133,21 @@ const googleLogin = async(req, res = response)=>{
 const confirmRegister = async (req, res = response) => {
     const token = req.params.token;
 
-    try{
-        const {uid, name} = verifyJWT(token, process.env.SECRET_JWT_EMAIL);
+    try {
+        const { uid, name } = verifyJWT(token, process.env.SECRET_JWT_EMAIL);
         await Usuario.updateOne({ _id: uid }, { $set: { confirmed: true } });
 
         // Generar JWT para la sesion
         const tokenSession = await generarJWT(uid, name);
 
         res.redirect(`${process.env.HOST}/login`);
-    }catch(err){
+    } catch (err) {
         console.log(err);
-         res.status(500).json({
+        res.status(500).json({
             ok: false,
             msg: "Token can't be verified"
         });
-    }     
+    }
 }
 
 
