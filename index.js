@@ -6,6 +6,13 @@ const { dbConnection } = require('./database/config');
 // Crear el servidor de express
 const app = express();
 
+app.get('/*', (req, res) => {
+    let url = path.join(__dirname, '../client/build', 'index.html');
+    if (!url.startsWith('/app/')) // we're on local windows
+        url = url.substring(1);
+    res.sendFile(url);
+});
+
 // Base de datos
 dbConnection();
 
