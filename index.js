@@ -1,5 +1,4 @@
 const express = require('express');
-const path = require('path');
 require('dotenv').config();
 const cors = require('cors');
 const { dbConnection } = require('./database/config');
@@ -7,13 +6,6 @@ const { dbConnection } = require('./database/config');
 // Crear el servidor de express
 const app = express();
 
-
-app.get("*", (req, res) => {
-    let url = path.join(__dirname, '../client/build', 'index.html');
-    if (!url.startsWith('/app/')) // since we're on local windows
-        url = url.substring(1);
-    res.sendFile(url);
-});
 
 // Base de datos
 dbConnection();
