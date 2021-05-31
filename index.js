@@ -1,11 +1,11 @@
 const express = require('express');
+const path = require('path');
 require('dotenv').config();
 const cors = require('cors');
 const { dbConnection } = require('./database/config');
 
 // Crear el servidor de express
 const app = express();
-
 
 // Base de datos
 dbConnection();
@@ -14,7 +14,12 @@ dbConnection();
 app.use(cors())
 
 // Directorio Público
-app.use(express.static('public'));
+// app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('*', function (req, res) {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 // Lectura y parseo del body
 app.use(express.json());
