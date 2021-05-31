@@ -106,7 +106,7 @@ const revalidarToken = async (req, res = response) => {
 }
 
 const googleLogin = async (req, res = response) => {
-    const { email } = req.body;
+    const { name, email } = req.body;
 
     try {
         let usuario = await Usuario.findOne({ email });
@@ -119,7 +119,7 @@ const googleLogin = async (req, res = response) => {
         res.json({
             ok: true,
             uid: usuario.id,
-            name: usuario.name
+            name: name
         })
     } catch (error) {
         console.log(error)
