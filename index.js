@@ -13,9 +13,6 @@ dbConnection();
 // CORS
 app.use(cors())
 
-// Directorio Público
-// app.use(express.static('public'));
-
 // Lectura y parseo del body
 app.use(express.json());
 
@@ -26,8 +23,9 @@ app.use('/api/days', require('./routes/days'));
 app.use('/api/notes', require('./routes/notes'));
 app.use('/api/lists', require('./routes/lists'));
 
-app.use(express.static(path.join(__dirname, 'public')));
 
+//Directorio publico (accede a las rutas de react)
+app.use(express.static(path.join(__dirname, 'public')));
 app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
