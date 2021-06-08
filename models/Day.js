@@ -15,8 +15,8 @@ const DaySchema = Schema({
         required: true
     },
     done: {
-        type: Number,   
-        required: true     
+        type: Number,
+        required: true
     },
     values: {
         type: Object,
@@ -33,7 +33,7 @@ const DaySchema = Schema({
     }
 });
 
-DaySchema.method('toJSON', function() {
+DaySchema.method('toJSON', function () {
     const { __v, _id, ...object } = this.toObject();
     object.id = _id;
     return object;
@@ -41,5 +41,5 @@ DaySchema.method('toJSON', function() {
 
 
 
-module.exports = model('Day', DaySchema );
+module.exports = model('Day', DaySchema);
 
