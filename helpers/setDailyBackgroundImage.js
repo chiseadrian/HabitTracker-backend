@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const Helper = require('../models/Helper');
+require('dotenv').config();
 
 const setDailyBackgroundImage = async () => {
     const urlImage = await getURLBackgroundImage();
@@ -24,24 +25,18 @@ const setDailyBackgroundImage = async () => {
     }
 }
 
-const getURLBackgroundImage = () => {
+const getURLBackgroundImage = async () => {
     const url = `https://api.unsplash.com/photos/random?client_id=${process.env.BACKGROUND_IMAGE_KEY}&orientation=landscape&query=landscape`;
-    let urlImage = null;
 
     try {
-        fetch(url)
-            .then(body => {
-                if (body.status === 200)
-                    urlImage = body.urls.raw;
-            });
+        const resp = await fetch(url);
+        const body = await resp.json();
+        return body.urls.raw;
     } catch (err) {
         console.log(err);
         return null;
     }
-
-    return urlImage;
 }
-
 
 module.exports = {
     setDailyBackgroundImage

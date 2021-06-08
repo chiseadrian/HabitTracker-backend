@@ -29,9 +29,9 @@ app.use('/api/lists', require('./routes/lists'));
 app.use('/api/helpers', require('./routes/helpers'));
 
 // run everyday at midnight
-// schedule.scheduleJob('0 0 * * *', () => {
-//     setDailyBackgroundImage();
-// })
+schedule.scheduleJob('0 0 * * *', () => {
+    setDailyBackgroundImage();
+})
 
 //Directorio publico (accede a las rutas de react)
 app.use(express.static(path.join(__dirname, 'public')));
