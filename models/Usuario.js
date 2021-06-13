@@ -11,15 +11,20 @@ const UsuarioSchema = Schema({
         unique: true
     },
     confirmed: {
-      type: Boolean,
-      defaultValue: false,
+        type: Boolean,
+        default: false,
     },
     password: {
         type: String,
+        required: true
+    },
+    google: {
+        type: Boolean,
+        default: false,
         required: true
     }
 });
 
 
-module.exports = model('Usuario', UsuarioSchema );
+module.exports = model('Usuario', UsuarioSchema);
 

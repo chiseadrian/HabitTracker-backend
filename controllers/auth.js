@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const Usuario = require('../models/Usuario');
 const { generarJWT, verifyJWT } = require('../helpers/jwt');
 const { sendConfirmEmail } = require('../helpers/sendConfirmEmail');
+const { googleVerify } = require('../helpers/googleVerify');
 
 
 const crearUsuario = async (req, res = response) => {
@@ -20,7 +21,6 @@ const crearUsuario = async (req, res = response) => {
         }
 
         usuario = new Usuario(req.body);
-        // Encriptar contraseña
         const salt = bcrypt.genSaltSync();
         usuario.password = bcrypt.hashSync(password, salt);
 
@@ -35,7 +35,7 @@ const crearUsuario = async (req, res = response) => {
 
     } catch (error) {
         console.log(error)
-        res.status(500).json({
+        res.status(400).json({
             ok: false,
             msg: 'Contact an admin'
         });
@@ -46,7 +46,6 @@ const loginUsuario = async (req, res = response) => {
     const { email, password } = req.body;
 
     try {
-
         const usuario = await Usuario.findOne({ email });
 
         if (!usuario) {
@@ -82,8 +81,6 @@ const loginUsuario = async (req, res = response) => {
             name: usuario.name,
             token
         })
-
-
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -106,26 +103,38 @@ const revalidarToken = async (req, res = response) => {
 }
 
 const googleLogin = async (req, res = response) => {
-    const { name, email } = req.body;
+    const { id_token } = req.body;
 
     try {
+        const { name, email } = await googleVerify(id_token);
         let usuario = await Usuario.findOne({ email });
 
-        if (!usuario) {  //si no existe se guarda
-            usuario = new Usuario(req.body);
+        if (!usuario) {  //si el usuario no existe en la BD se crea
+            const data = {
+                name,
+                email,
+                password: '...',
+                google: true,
+                confirmed: true
+            };
+
+            usuario = new Usuario(data);
             await usuario.save();
         }
 
+        // Generar el JWT
+        const token = await generarJWT(usuario.id, name);
         res.json({
             ok: true,
             uid: usuario.id,
-            name: name
-        })
+            name,
+            token
+        });
     } catch (error) {
         console.log(error)
-        res.status(500).json({
+        res.status(400).json({
             ok: false,
-            msg: 'Contact an admin'
+            msg: 'Google token is not valid'
         });
     }
 }

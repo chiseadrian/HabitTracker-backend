@@ -14,14 +14,14 @@ const router = Router();
 
 
 router.post(
-    '/new', 
+    '/new',
     [ // middlewares
         check('name', 'Name is mandatory!').not().isEmpty(),
         check('email', 'Email is mandatory!').isEmail(),
         check('password', 'Password must be at least 6 characters long').isLength({ min: 6 }),
         validarCampos
     ],
-    crearUsuario 
+    crearUsuario
 );
 
 router.post(
@@ -31,21 +31,20 @@ router.post(
         check('password', 'Password must be at least 6 characters long').isLength({ min: 6 }),
         validarCampos
     ],
-    loginUsuario 
+    loginUsuario
 );
 
 router.post(
     '/google',
     [
-        check('email', 'Email is mandatory!').isEmail(),
-        check('name', 'Name is mandatory!').not().isEmpty(),
+        check('id_token', 'id_token is mandatory!').not().isEmpty(),
         validarCampos
     ],
-    googleLogin 
+    googleLogin
 );
 
 
-router.get('/renew', validarJWT , revalidarToken);
+router.get('/renew', validarJWT, revalidarToken);
 router.get('/confirmation/:token', confirmRegister);
 
 
