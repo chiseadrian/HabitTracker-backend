@@ -2,9 +2,9 @@ const { response } = require('express');
 const Day = require('../models/Day');
 
 
-const getDays = async( req, res = response ) => {
-    const userId = req.uid;  
-    const days = await Day.find({ 'user': { $in: userId } }).sort({date: 1});
+const getDays = async (req, res = response) => {
+    const userId = req.uid;
+    const days = await Day.find({ 'user': { $in: userId } }).sort({ date: 1 });
 
     res.json({
         ok: true,
@@ -12,18 +12,18 @@ const getDays = async( req, res = response ) => {
     });
 }
 
-const getDaysInRange = async( req, res = response ) => {
-    const userId = req.uid;  
-    const start = req.params.start;  
-    const end = req.params.end;  
+const getDaysInRange = async (req, res = response) => {
+    const userId = req.uid;
+    const start = req.params.start;
+    const end = req.params.end;
 
     const days = await Day.find({
         'user': { $in: userId },
         'date': {
-            $gte: start, 
+            $gte: start,
             $lte: end
         }
-    }).sort({date: 1});
+    }).sort({ date: 1 });
 
     res.json({
         ok: true,
@@ -31,8 +31,8 @@ const getDaysInRange = async( req, res = response ) => {
     });
 }
 
-const addDay = async ( req, res = response ) => {
-    const day = new Day( req.body );
+const addDay = async (req, res = response) => {
+    const day = new Day(req.body);
 
     try {
         day.user = req.uid;
@@ -51,19 +51,19 @@ const addDay = async ( req, res = response ) => {
     }
 }
 
-const updateDay = async( req, res = response ) => {
+const updateDay = async (req, res = response) => {
     const dayId = req.params.id;
     const uid = req.uid;
 
     try {
-        const day = await Day.findById( dayId );
-        if ( !day ) {
+        const day = await Day.findById(dayId);
+        if (!day) {
             return res.status(404).json({
                 ok: false,
                 msg: 'There is no day with that id'
             });
         }
-        if ( day.user.toString() !== uid ) {
+        if (day.user.toString() !== uid) {
             return res.status(401).json({
                 ok: false,
                 msg: 'You do not have the privilege to delete this day'
@@ -74,7 +74,8 @@ const updateDay = async( req, res = response ) => {
             ...req.body,
             user: uid
         }
-        const updatedDay = await Day.findByIdAndUpdate( dayId, newDay, { new: true } );
+
+        const updatedDay = await Day.findByIdAndUpdate(dayId, newDay, { new: true });
         res.json({
             ok: true,
             evento: updatedDay
@@ -89,27 +90,27 @@ const updateDay = async( req, res = response ) => {
     }
 }
 
-const deleteDay = async( req, res = response ) => {
+const deleteDay = async (req, res = response) => {
 
     const dayId = req.params.id;
     const uid = req.uid;
 
     try {
-        const day = await Day.findById( dayId );
-        if ( !day ) {
+        const day = await Day.findById(dayId);
+        if (!day) {
             return res.status(404).json({
                 ok: false,
                 msg: 'There is no day with that id'
             });
         }
-        if ( day.user.toString() !== uid ) {
+        if (day.user.toString() !== uid) {
             return res.status(401).json({
                 ok: false,
                 msg: 'You do not have the privilege to delete this day'
             });
         }
 
-        await Day.findByIdAndDelete( dayId );
+        await Day.findByIdAndDelete(dayId);
         res.json({ ok: true });
     } catch (error) {
         console.log(error);
