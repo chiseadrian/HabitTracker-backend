@@ -40,9 +40,9 @@ class Server {
         //Directorio publico (accede a las rutas de react)
 
         this.app.use(express.static(path.join(__dirname, '../public')));
-        this.app.get('*', function (req, res) {
-            res.sendFile(path.join(__dirname, '../public', 'index.html'));
-        });
+        // this.app.get('*', function (req, res) {
+        //     res.sendFile(path.join(__dirname, '../public', 'index.html'));
+        // });
 
         // run everyday at midnight
         schedule.scheduleJob('0 0 * * *', () => {
