@@ -37,12 +37,8 @@ class Server {
         // Lectura y parseo del body
         this.app.use(express.json());
 
-        //Directorio publico (accede a las rutas de react)
-
+        //Directorio publico
         this.app.use(express.static(path.join(__dirname, '../public')));
-        // this.app.get('*', function (req, res) {
-        //     res.sendFile(path.join(__dirname, '../public', 'index.html'));
-        // });
 
         // run everyday at midnight
         schedule.scheduleJob('0 0 * * *', () => {
@@ -57,6 +53,11 @@ class Server {
         this.app.use(this.paths.notes, require('../routes/notes'));
         this.app.use(this.paths.lists, require('../routes/lists'));
         this.app.use(this.paths.helpers, require('../routes/helpers'));
+
+        //para que funcionen las rutas de react en heroku
+        this.app.get('*', function (req, res) {
+            res.sendFile(path.join(__dirname, '../public', 'index.html'));
+        });
     }
 
     listen() {
