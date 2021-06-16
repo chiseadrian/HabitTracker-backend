@@ -2,9 +2,7 @@ const { response } = require('express');
 const bcrypt = require('bcryptjs');
 
 const Usuario = require('../models/Usuario');
-const { generarJWT, verifyJWT } = require('../helpers/jwt');
-const { sendConfirmEmail } = require('../helpers/sendConfirmEmail');
-const { googleVerify } = require('../helpers/googleVerify');
+const { generateJWT, verifyJWT, googleVerify, sendConfirmEmail } = require('../helpers');
 
 
 const crearUsuario = async (req, res = response) => {
@@ -73,7 +71,7 @@ const loginUsuario = async (req, res = response) => {
         }
 
         // Generar JWT
-        const token = await generarJWT(usuario.id, usuario.name);
+        const token = await generateJWT(usuario.id, usuario.name);
 
         res.json({
             ok: true,
@@ -90,9 +88,9 @@ const loginUsuario = async (req, res = response) => {
     }
 }
 
-const revalidarToken = async (req, res = response) => {
+const renewToken = async (req, res = response) => {
     const { uid, name } = req;
-    const token = await generarJWT(uid, name);    // Generar JWT
+    const token = await generateJWT(uid, name);
 
     res.json({
         ok: true,
@@ -123,7 +121,7 @@ const googleLogin = async (req, res = response) => {
         }
 
         // Generar el JWT
-        const token = await generarJWT(usuario.id, name);
+        const token = await generateJWT(usuario.id, name);
         res.json({
             ok: true,
             uid: usuario.id,
@@ -147,7 +145,7 @@ const confirmRegister = async (req, res = response) => {
         await Usuario.updateOne({ _id: uid }, { $set: { confirmed: true } });
 
         // Generar JWT para la sesion
-        const tokenSession = await generarJWT(uid, name);
+        const tokenSession = await generateJWT(uid, name);
 
         res.redirect(`${process.env.HOST}/login`);
     } catch (err) {
@@ -163,7 +161,7 @@ const confirmRegister = async (req, res = response) => {
 module.exports = {
     crearUsuario,
     loginUsuario,
-    revalidarToken,
+    renewToken,
     googleLogin,
     confirmRegister
 }

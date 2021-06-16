@@ -2,7 +2,7 @@ const { Schema, model } = require('mongoose');
 
 
 const HelperSchema = Schema({
-    image: {
+    image: {        //guarda url de la imagen del home  (siempre hay solamente una)
         type: String,
         required: true
     }
@@ -13,6 +13,8 @@ HelperSchema.method('toJSON', function () {
     object.id = _id;
     return object;
 });
+
+
 
 module.exports = model('Helper', HelperSchema);
 
