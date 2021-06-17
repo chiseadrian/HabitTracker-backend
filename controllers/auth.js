@@ -40,6 +40,54 @@ const crearUsuario = async (req, res = response) => {
     }
 }
 
+const updateUser = async (req, res = response) => {
+    const { name, email, password, newPassword } = req.body;
+    const newUser = { name, email };
+    const uid = req.uid;
+
+    try {
+        const user = await Usuario.findById(uid);
+        if (!user) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'There is no user with that id'
+            });
+        }
+
+        // Confirma la contraseña
+        const validPassword = bcrypt.compareSync(password, user.password);
+        if (!validPassword) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'Incorrect password!'
+            });
+        }
+
+        if (newPassword) {
+            if (newPassword.length < 6) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'The password must be at least 6 characters!'
+                });
+            }
+            const salt = bcrypt.genSaltSync();
+            newUser.password = bcrypt.hashSync(newPassword, salt);
+        }
+
+        const updatedUser = await Usuario.findByIdAndUpdate(uid, newUser, { new: true });
+        res.json({
+            ok: true,
+            user: { uid: updatedUser._id, name, email }
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Contact an admin'
+        });
+    }
+}
+
 const loginUsuario = async (req, res = response) => {
     const { email, password } = req.body;
 
@@ -77,6 +125,7 @@ const loginUsuario = async (req, res = response) => {
             ok: true,
             uid: usuario.id,
             name: usuario.name,
+            email,
             token
         })
     } catch (error) {
@@ -92,11 +141,14 @@ const renewToken = async (req, res = response) => {
     const { uid, name } = req;
     const token = await generateJWT(uid, name);
 
+    const { email } = await Usuario.findById(uid);
+
     res.json({
         ok: true,
         token,
         uid,
-        name
+        name,
+        email
     })
 }
 
@@ -125,7 +177,8 @@ const googleLogin = async (req, res = response) => {
         res.json({
             ok: true,
             uid: usuario.id,
-            name,
+            name: usuario.name,
+            email,
             token
         });
     } catch (error) {
@@ -163,5 +216,6 @@ module.exports = {
     loginUsuario,
     renewToken,
     googleLogin,
-    confirmRegister
+    confirmRegister,
+    updateUser
 }
