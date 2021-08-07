@@ -21,9 +21,9 @@ router.get('/', getNotes);
 router.post(
     '/',
     [
-        check('title', 'Title is mandatory!').not().isEmpty(),
-        check('body', 'Body is mandatory!').not().isEmpty(),
-        check('date', 'Date is mandatory!').not().isEmpty(),
+        check('title', 'Title is mandatory').not().isEmpty(),
+        check('body', 'Body is mandatory').not().isEmpty(),
+        check('date', 'Date is mandatory').not().isEmpty(),
         validationFields
     ],
     addNote
@@ -33,8 +33,8 @@ router.post(
 router.put(
     '/:id',
     [
-        check('title', 'Title is mandatory!').not().isEmpty(),
-        check('body', 'Body is mandatory!').not().isEmpty(),
+        check('title', 'Title is mandatory').not().isEmpty(),
+        check('body', 'Body is mandatory').not().isEmpty(),
         validationFields
     ],
     updateNote

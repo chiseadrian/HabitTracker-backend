@@ -14,7 +14,7 @@ const crearUsuario = async (req, res = response) => {
         if (usuario) {
             return res.status(400).json({
                 ok: false,
-                msg: 'Email address already registered!'
+                msg: 'Email address already registered'
             });
         }
 
@@ -28,7 +28,7 @@ const crearUsuario = async (req, res = response) => {
         res.status(201).json({
             ok: true,
             uid: usuario.id,
-            name: usuario.name
+            name: usuario.name,
         })
 
     } catch (error) {
@@ -41,8 +41,8 @@ const crearUsuario = async (req, res = response) => {
 }
 
 const updateUser = async (req, res = response) => {
-    const { name, email, password, newPassword } = req.body;
-    const newUser = { name, email };
+    const { name, email, password, newPassword, language } = req.body;
+    const newUser = { name, email, language };
     const uid = req.uid;
 
     try {
@@ -59,7 +59,7 @@ const updateUser = async (req, res = response) => {
         if (!validPassword) {
             return res.status(400).json({
                 ok: false,
-                msg: 'Incorrect password!'
+                msg: 'Incorrect password'
             });
         }
 
@@ -67,7 +67,7 @@ const updateUser = async (req, res = response) => {
             if (newPassword.length < 6) {
                 return res.status(400).json({
                     ok: false,
-                    msg: 'The password must be at least 6 characters!'
+                    msg: 'The password must be at least 6 characters'
                 });
             }
             const salt = bcrypt.genSaltSync();
@@ -77,7 +77,7 @@ const updateUser = async (req, res = response) => {
         const updatedUser = await Usuario.findByIdAndUpdate(uid, newUser, { new: true });
         res.json({
             ok: true,
-            user: { uid: updatedUser._id, name, email }
+            user: { uid: updatedUser._id, name, email, language }
         });
     } catch (error) {
         console.log(error);
@@ -97,14 +97,14 @@ const loginUsuario = async (req, res = response) => {
         if (!usuario) {
             return res.status(400).json({
                 ok: false,
-                msg: 'This combination of user and password does not exist!'
+                msg: 'This combination of user and password does not exist'
             });
         }
 
         if (!usuario.confirmed) {
             return res.status(400).json({
                 ok: false,
-                msg: "Please verify your email address!"
+                msg: "Please verify your email address"
             });
         }
 
@@ -114,7 +114,7 @@ const loginUsuario = async (req, res = response) => {
         if (!validPassword) {
             return res.status(400).json({
                 ok: false,
-                msg: 'This combination of user and password does not exist!'
+                msg: 'This combination of user and password does not exist'
             });
         }
 
@@ -125,6 +125,7 @@ const loginUsuario = async (req, res = response) => {
             ok: true,
             uid: usuario.id,
             name: usuario.name,
+            language: usuario.language,
             email,
             token
         })
@@ -141,14 +142,15 @@ const renewToken = async (req, res = response) => {
     const { uid, name } = req;
     const token = await generateJWT(uid, name);
 
-    const { email } = await Usuario.findById(uid);
+    const { email, language } = await Usuario.findById(uid);
 
     res.json({
         ok: true,
         token,
         uid,
         name,
-        email
+        email,
+        language
     })
 }
 
@@ -165,7 +167,8 @@ const googleLogin = async (req, res = response) => {
                 email,
                 password: '...',
                 google: true,
-                confirmed: true
+                confirmed: true,
+                language: 'en'
             };
 
             usuario = new Usuario(data);
@@ -178,6 +181,7 @@ const googleLogin = async (req, res = response) => {
             ok: true,
             uid: usuario.id,
             name: usuario.name,
+            language: usuario.language,
             email,
             token
         });

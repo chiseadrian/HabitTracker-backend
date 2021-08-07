@@ -22,10 +22,10 @@ router.get('/', getRoutines);
 router.post(
     '/',
     [
-        check('name', 'Name is mandatory!').not().isEmpty(),
-        check('frecuency', 'Frecuency is mandatory!').not().isEmpty(),
-        check('goal', 'Goal is mandatory!').not().isEmpty(),
-        check('date', 'Date is mandatory!').custom(isDate),
+        check('name', 'Name is mandatory').not().isEmpty(),
+        check('frecuency', 'Frecuency is mandatory').not().isEmpty(),
+        check('goal', 'Goal is mandatory').not().isEmpty(),
+        check('date', 'Date is mandatory').custom(isDate),
         validationFields
     ],
     addRoutine
@@ -35,9 +35,9 @@ router.post(
 router.put(
     '/:id',
     [
-        check('name', 'Name is mandatory!').not().isEmpty(),
-        check('frecuency', 'Frecuency is mandatory!').not().isEmpty(),
-        check('goal', 'Goal is mandatory!').not().isEmpty(),
+        check('name', 'Name is mandatory').not().isEmpty(),
+        check('frecuency', 'Frecuency is mandatory').not().isEmpty(),
+        check('goal', 'Goal is mandatory').not().isEmpty(),
         validationFields
     ],
     updateRoutine

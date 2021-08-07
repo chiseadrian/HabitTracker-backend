@@ -66,7 +66,7 @@ const updateDay = async (req, res = response) => {
         if (day.user.toString() !== uid) {
             return res.status(401).json({
                 ok: false,
-                msg: 'You do not have the privilege to delete this day'
+                msg: 'You do not have the privilege to delete this'
             });
         }
 

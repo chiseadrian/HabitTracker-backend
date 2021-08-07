@@ -22,8 +22,8 @@ const router = Router();
 router.post(
     '/new',
     [
-        check('name', 'Name is mandatory!').not().isEmpty(),
-        check('email', 'Email is mandatory!').isEmail(),
+        check('name', 'Name is mandatory').not().isEmpty(),
+        check('email', 'Email is mandatory').isEmail(),
         check('password', 'Password must be at least 6 characters long').isLength({ min: 6 }),
         validationFields
     ],
@@ -34,8 +34,8 @@ router.post(
     '/updateUser',
     [
         validationJWT,
-        check('name', 'Name is mandatory!').not().isEmpty(),
-        check('email', 'Email is mandatory!').isEmail(),
+        check('name', 'Name is mandatory').not().isEmpty(),
+        check('email', 'Email is mandatory').isEmail(),
         check('password', 'Password must be at least 6 characters long').isLength({ min: 6 }),
         validationFields
     ],
@@ -45,7 +45,7 @@ router.post(
 router.post(
     '/',
     [
-        check('email', 'Email is mandatory!').isEmail(),
+        check('email', 'Email is mandatory').isEmail(),
         check('password', 'Password must be at least 6 characters long').isLength({ min: 6 }),
         validationFields
     ],
@@ -55,7 +55,7 @@ router.post(
 router.post(
     '/google',
     [
-        check('id_token', 'id_token is mandatory!').not().isEmpty(),
+        check('id_token', 'id_token is mandatory').not().isEmpty(),
         validationFields
     ],
     googleLogin

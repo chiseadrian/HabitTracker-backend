@@ -22,12 +22,12 @@ router.get('/:start/:end', getDaysInRange);
 router.post(
     '/',
     [
-        check('done', 'Done is mandatory!').not().isEmpty(),
-        check('values', 'Values are mandatory!').not().isEmpty(),
-        check('numDay', 'Day is mandatory!').not().isEmpty(),
-        check('numMonth', 'Month is mandatory!').not().isEmpty(),
-        check('numYear', 'Year is mandatory!').not().isEmpty(),
-        check('date', 'Date is mandatory!').not().isEmpty(),
+        check('done', 'Done is mandatory').not().isEmpty(),
+        check('values', 'Values are mandatory').not().isEmpty(),
+        check('numDay', 'Day is mandatory').not().isEmpty(),
+        check('numMonth', 'Month is mandatory').not().isEmpty(),
+        check('numYear', 'Year is mandatory').not().isEmpty(),
+        check('date', 'Date is mandatory').not().isEmpty(),
         validationFields
     ],
     addDay
@@ -37,8 +37,8 @@ router.post(
 router.put(
     '/:id',
     [
-        check('done', 'Done is mandatory!').not().isEmpty(),
-        check('values', 'Values are mandatory!').not().isEmpty(),
+        check('done', 'Done is mandatory').not().isEmpty(),
+        check('values', 'Values are mandatory').not().isEmpty(),
         validationFields
     ],
     updateDay

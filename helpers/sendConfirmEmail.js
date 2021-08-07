@@ -21,7 +21,7 @@ const sendConfirmEmail = async (uid, name, email) => {
 
       if (err) {
         console.log(err);
-        reject('Error when generating the token to send the confirmation email');
+        reject('Error generating the token to send the confirmation email');
       }
 
       transporter.sendMail({

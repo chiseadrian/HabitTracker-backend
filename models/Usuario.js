@@ -11,6 +11,10 @@ const UsuarioSchema = Schema({
         required: true,
         unique: true
     },
+    language: {
+        type: String,
+        default: 'en'
+    },
     confirmed: {
         type: Boolean,
         default: false,

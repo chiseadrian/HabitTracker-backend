@@ -21,10 +21,10 @@ router.get('/', getLists);
 router.post(
     '/',
     [
-        check('name', 'Name is mandatory!').not().isEmpty(),
-        check('date', 'Date is mandatory!').not().isEmpty(),
-        check('columns', 'Columns are mandatory!').not().isEmpty(),
-        check('values', 'Values are mandatory!').not().isEmpty(),
+        check('name', 'Name is mandatory').not().isEmpty(),
+        check('date', 'Date is mandatory').not().isEmpty(),
+        check('columns', 'Columns are mandatory').not().isEmpty(),
+        check('values', 'Values are mandatory').not().isEmpty(),
         validationFields
     ],
     addList
@@ -34,10 +34,10 @@ router.post(
 router.put(
     '/:id',
     [
-        check('name', 'Name is mandatory!').not().isEmpty(),
-        check('date', 'Date is mandatory!').not().isEmpty(),
-        check('columns', 'Columns are mandatory!').not().isEmpty(),
-        check('values', 'Values are mandatory!').not().isEmpty(),
+        check('name', 'Name is mandatory').not().isEmpty(),
+        check('date', 'Date is mandatory').not().isEmpty(),
+        check('columns', 'Columns are mandatory').not().isEmpty(),
+        check('values', 'Values are mandatory').not().isEmpty(),
         validationFields
     ],
     updateList

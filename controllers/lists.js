@@ -2,9 +2,9 @@ const { response } = require('express');
 const List = require('../models/List');
 
 
-const getLists = async( req, res = response ) => {
-    const userId = req.uid;  
-    const lists = await List.find({ 'user': { $in: userId } }).sort({date: 1});
+const getLists = async (req, res = response) => {
+    const userId = req.uid;
+    const lists = await List.find({ 'user': { $in: userId } }).sort({ date: 1 });
 
     res.json({
         ok: true,
@@ -12,8 +12,8 @@ const getLists = async( req, res = response ) => {
     });
 }
 
-const addList = async ( req, res = response ) => {
-    const list = new List( req.body );
+const addList = async (req, res = response) => {
+    const list = new List(req.body);
 
     try {
         list.user = req.uid;
@@ -32,22 +32,22 @@ const addList = async ( req, res = response ) => {
     }
 }
 
-const updateList = async( req, res = response ) => {
+const updateList = async (req, res = response) => {
     const id = req.params.id;
     const uid = req.uid;
 
     try {
-        const list = await List.findById( id );
-        if ( !list ) {
+        const list = await List.findById(id);
+        if (!list) {
             return res.status(404).json({
                 ok: false,
                 msg: 'There is no list with that id'
             });
         }
-        if ( list.user.toString() !== uid ) {
+        if (list.user.toString() !== uid) {
             return res.status(401).json({
                 ok: false,
-                msg: 'You do not have the privilege to delete this list'
+                msg: 'You do not have the privilege to delete this'
             });
         }
 
@@ -55,7 +55,7 @@ const updateList = async( req, res = response ) => {
             ...req.body,
             user: uid
         }
-        const updatedList = await List.findByIdAndUpdate( id, newList, { new: true } );
+        const updatedList = await List.findByIdAndUpdate(id, newList, { new: true });
         res.json({
             ok: true,
             evento: updatedList
@@ -70,26 +70,26 @@ const updateList = async( req, res = response ) => {
     }
 }
 
-const deleteList = async( req, res = response ) => {
+const deleteList = async (req, res = response) => {
     const id = req.params.id;
     const uid = req.uid;
 
     try {
-        const list = await List.findById( id );
-        if ( !list ) {
+        const list = await List.findById(id);
+        if (!list) {
             return res.status(404).json({
                 ok: false,
                 msg: 'There is no list with that id'
             });
         }
-        if ( list.user.toString() !== uid ) {
+        if (list.user.toString() !== uid) {
             return res.status(401).json({
                 ok: false,
-                msg: 'You do not have the privilege to delete this list'
+                msg: 'You do not have the privilege to delete this'
             });
         }
 
-        await List.findByIdAndDelete( id );
+        await List.findByIdAndDelete(id);
         res.json({ ok: true });
     } catch (error) {
         console.log(error);

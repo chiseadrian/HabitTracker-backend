@@ -48,7 +48,7 @@ const updateNote = async (req, res = response) => {
         if (note.user.toString() !== uid) {
             return res.status(401).json({
                 ok: false,
-                msg: 'You do not have the privilege to delete this note'
+                msg: 'You do not have the privilege to delete this'
             });
         }
 
@@ -87,7 +87,7 @@ const deleteNote = async (req, res = response) => {
         if (note.user.toString() !== uid) {
             return res.status(401).json({
                 ok: false,
-                msg: 'You do not have the privilege to delete this note'
+                msg: 'You do not have the privilege to delete this'
             });
         }
 
